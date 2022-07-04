@@ -1,9 +1,27 @@
 // solution goes here
 
+type CommentData = {
+    id: number,
+    content: string,
+    imageId: number
+}
+
+type Image = {
+    id: number,
+    title: string,
+    likes: number,
+    image: string
+    comments: CommentData
+}
+
+type State = {
+   image: Image[]
+}
+
 const imageContainerEl = document.querySelector(".image-container")
 
 const state = {
-    images : []
+    images: []
 }
 
 function getPosts() {
@@ -13,6 +31,8 @@ function getPosts() {
 
 
 function renderPost (image) {
+
+    if (imageContainerEl === null) return
 
     const articleEL = document.createElement('article')
     articleEL.setAttribute("class", "image-card")
