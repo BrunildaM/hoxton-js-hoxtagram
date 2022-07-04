@@ -11,24 +11,39 @@ type Image = {
     title: string,
     likes: number,
     image: string
-    comments: CommentData
+    comments: CommentData[]
 }
 
 type State = {
-   image: Image[]
+   images: Image[]
 }
+
+
+
+let state: State = {
+    images: []
+  }
 
 const imageContainerEl = document.querySelector(".image-container")
 
-const state = {
-    images: []
-}
-
 function getPosts() {
-    return fetch ("http://localhost:3000/images")
+    return fetch ("http://localhost:5000/images")
         .then ( resp => resp.json())
 }
 
+
+function createComment(imageId, content) {
+    return fetch('http://localhost:5000/comments', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            imageId: imageId,
+            content: content
+        })
+    }) .then(resp => resp.json())
+}
 
 function renderPost (image) {
 
@@ -68,7 +83,27 @@ function renderPost (image) {
     commentsList.append(commentsLiEl)
     }
 
-    articleEL.append(titleEl, imgEl, likesDiv, commentsList)
+    const newCommentForm = document.createElement('form')
+    newCommentForm.className = "comment-form"
+
+    const commentInput = document.createElement('input')
+    commentInput.className = 'comment-input'
+    commentInput.type = 'text'
+    commentInput.placeholder = 'Feel free to comment'
+    commentInput.name = 'comment'
+
+    newCommentForm.append(commentInput)
+    newCommentForm.addEventListener("submit", function (event) {
+        event.preventDefault()
+        createComment(image.id, newCommentForm.comment.value)
+        .then(function (createComment) {
+            image.comment.push(createComment)
+            render()
+        })
+
+    })
+
+    articleEL.append(titleEl, imgEl, likesDiv, commentsList, newCommentForm)
     imageContainerEl.append(articleEL)
 
 }
@@ -89,6 +124,7 @@ function renderPost (image) {
 
 
 function renderPosts () {
+    //@ts-ignore
     imageContainerEl.innerHTML =  ''
 
     for (const image of state.images) {
