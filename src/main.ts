@@ -45,6 +45,16 @@ function createComment(imageId, content) {
     }) .then(resp => resp.json())
 }
 
+function updateImage (image) {
+    return fetch(`http://localhost:5000/images/${image.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(image)
+    }).then(resp => resp.json())
+  }
+
 function renderPost (image) {
 
     if (imageContainerEl === null) return
@@ -70,6 +80,11 @@ function renderPost (image) {
     const buttonEl = document.createElement('button')
     buttonEl.setAttribute("class", "like-button")
     buttonEl.textContent = '♥'
+    buttonEl.addEventListener("click", function () {
+        image.likes++
+        updateImage({ id: image.id, likes: image.likes})
+        render()
+    }) 
 
     likesDiv.append(likeEl, buttonEl)
 
