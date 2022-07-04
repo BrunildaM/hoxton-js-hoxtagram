@@ -24,7 +24,9 @@ let state: State = {
     images: []
   }
 
+const newPostForm = document.querySelector('.comment-form.image-card')
 const imageContainerEl = document.querySelector(".image-container")
+
 
 function getPosts() {
     return fetch ("http://localhost:5000/images")
@@ -45,6 +47,22 @@ function createComment(imageId, content) {
     }) .then(resp => resp.json())
 }
 
+
+function createImage(title, imageSrc) {
+    return fetch('http://localhost:5000/images', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            image: imageSrc,
+            likes: 0
+        })
+    }) .then(resp => resp.json())
+}
+
+
 function updateImage (image) {
     return fetch(`http://localhost:5000/images/${image.id}`, {
       method: 'PATCH',
@@ -53,6 +71,13 @@ function updateImage (image) {
       },
       body: JSON.stringify(image)
     }).then(resp => resp.json())
+  }
+
+
+  function deleteComment (id) {
+    return fetch (`http://localhost:5000/comments/${id}`, {
+      method: "DELETE"
+    }) .then(resp => resp.json())
   }
 
 function renderPost (image) {
@@ -95,6 +120,22 @@ function renderPost (image) {
 
     const commentsLiEl = document.createElement('li')
     commentsLiEl.textContent = comment.content
+
+    const deleteButton = document.createElement('button')
+    deleteButton.textContent = " x"
+    deleteButton.className = 'delete-comment-button'
+    deleteButton.addEventListener("click", function () {
+        deleteComment(comment.id)
+
+        image.comments.filter(function(deletedComment) {
+            return deletedComment.id != comment.id
+        })
+
+        render()
+    })
+
+    commentsLiEl.append(deleteButton)
+
     commentsList.append(commentsLiEl)
     }
 
@@ -147,6 +188,59 @@ function renderPosts () {
     }
 }
 
+
+// why aren't you working my dear function, I spent hours here 
+
+function addNewPostForm (newPostForm) {
+    
+      if (newPostForm === null) return
+
+     const formEl = document.createElement('form')
+      formEl.className = "comment-form image-card"
+
+      const newPostEl = document.createElement('h2')
+      newPostEl.className = "title"
+      newPostEl.textContent = "New Post"
+
+      const inputTitleEl = document.createElement('input')
+      inputTitleEl.className = "comment-input"
+      inputTitleEl.type = "text"
+      inputTitleEl.name = "title"
+      inputTitleEl.id = "title"
+      inputTitleEl.placeholder = "Add a title..."
+
+      const inputImageEl = document.createElement('input')
+      inputImageEl.className = "comment-input"
+      inputImageEl.type = "url"
+      inputImageEl.name = "image"
+      inputImageEl.id = "image"
+      inputImageEl.placeholder = "Add an image url..."
+
+      const submitButtonEl = document.createElement('button')
+      submitButtonEl.className = "comment-button"
+      submitButtonEl.type = "submit"
+      submitButtonEl.textContent = "Post" 
+
+
+      formEl.append(newPostEl, inputTitleEl, inputImageEl, submitButtonEl)
+      newPostForm.append(formEl) 
+
+      newPostForm.addEventListener('submit', function (event) {
+        event.preventDefault()
+
+        createImage(newPostForm.title.value, newPostForm.image.value)
+           .then(function (imageFromServer) {
+
+            imageFromServer.comments = []
+            state.images.push(imageFromServer)
+            
+            render()
+           })
+      })
+}
+
+addNewPostForm (newPostForm)
+
 function render () {
     renderPosts()
 }
@@ -156,3 +250,6 @@ function render () {
         state.images = images
         render()
     })
+
+
+   
