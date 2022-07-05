@@ -189,13 +189,13 @@ function renderPosts () {
 }
 
 
-// why aren't you working my dear function, I spent hours here 
+// finally fixed
 
 function addNewPostForm (newPostForm) {
     
       if (newPostForm === null) return
 
-     const formEl = document.createElement('form')
+     /* const formEl = document.createElement('form')
       formEl.className = "comment-form image-card"
 
       const newPostEl = document.createElement('h2')
@@ -223,7 +223,7 @@ function addNewPostForm (newPostForm) {
 
 
       formEl.append(newPostEl, inputTitleEl, inputImageEl, submitButtonEl)
-      newPostForm.append(formEl) 
+      newPostForm.append(formEl) */
 
       newPostForm.addEventListener('submit', function (event) {
         event.preventDefault()
