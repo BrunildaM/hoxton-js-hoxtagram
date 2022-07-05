@@ -11,6 +11,30 @@
       "title": "Coder cats",
       "likes": 8,
       "image": "./assets/coder-cat.jpeg"
+    },
+    {
+      "title": "Hello",
+      "image": "https://www.pexels.com/photo/close-up-photo-of-glowing-blue-butterflies-326055/",
+      "likes": 0,
+      "id": 3
+    },
+    {
+      "title": "Hello",
+      "image": "https://www.pexels.com/photo/close-up-photo-of-glowing-blue-butterflies-326055/",
+      "likes": 0,
+      "id": 4
+    },
+    {
+      "title": "Hello",
+      "image": "https://www.pexels.com/photo/close-up-photo-of-glowing-blue-butterflies-326055/",
+      "likes": 2,
+      "id": 5
+    },
+    {
+      "title": "Hello",
+      "image": "https://www.pexels.com/photo/close-up-photo-of-glowing-blue-butterflies-326055/",
+      "likes": 0,
+      "id": 6
     }
   ],
   "comments": [
@@ -23,6 +47,16 @@
       "imageId": 1,
       "content": "Hello",
       "id": 3
+    },
+    {
+      "imageId": 1,
+      "content": "Cute dog",
+      "id": 4
+    },
+    {
+      "imageId": 1,
+      "content": "Cute dog",
+      "id": 5
     }
   ]
 }
